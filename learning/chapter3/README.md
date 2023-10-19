@@ -39,7 +39,7 @@ variable "image_name" {
 
 ```hcl
 output "output_variable_name" {
-  depend_on = [
+  depends_on = [
     data.huaweicloud_xxx_xxx.test.xxx,
     huaweicloud_xxx_xxx.test.xxx,
   ]

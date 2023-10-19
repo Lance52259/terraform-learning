@@ -27,7 +27,9 @@ required_providers中配置了我们需要用远端或本地加载的provider包
 + **source**: 待加载仓库的远端或本地路径
 + **version**: 版本信息
 
-### 如何加载远端provider
+## 如何加载远端provider
+
+以华为云为例，通过在required_providers中配置华为云远端路径和待下载版本信息用于从远端加载特定版本的provider。
 
 ```hcl
 terraform {
@@ -40,12 +42,13 @@ terraform {
 }
 ```
 
-对于远端provider的加载，
-
+关于远端provider的下载配置，其**source**和**version**的含义如下：
 + **source**: 远端仓库的名称，其由两部分组成，分别是**组织**和**仓库**，通过斜杠进行组合，格式为**组织**/**仓库**。
 + **version**: 待加载provider的版本，可通过`=`指定需要加载的特定版本，通过`>=`指定需要加载的最小provider版本，优先加载最新版本，后续可通过`terraform init -upgrade`进行升级。
 
-### 如何加载本地provider
+## 如何加载本地provider
+
+不同于从远端加载provider，本地provider加载配置意在从执行机文件系统中索引特定版本的provider。
 
 ```hcl
 terraform {
@@ -58,5 +61,6 @@ terraform {
 }
 ```
 
+关于本地provider的下载配置，其**source**和**version**的含义如下：
 + **source**: 本地路径，其查找的上层目录为`~/.terraform.d/plugins`。用户需要根据本机的操作系统版本在source目录下创建正确的版本文件存放目录，格式为：`<provider_version>/<os_type>`，如：我们WSL所使用的Ubuntu所需的目录为`1.56.0/linux_amd64` (以1.56.0版本为例)。
 + **version**: 待加载provider的版本，可通过`=`指定需要加载的特定版本，通过`>=`指定需要加载的最小provider版本，优先加载最新版本，后续可通过`terraform init -upgrade`进行升级。

@@ -12,12 +12,16 @@ resource "huaweicloud_vpc" "test" {
   cidr = var.vpc_cidr
 }
 
-module "network" {
-  source = "./modules/network"
+# module "network" {
+#   source = "./modules/network"
 
-  vpc_name = huaweicloud_vpc.test.name
+#   vpc_name = huaweicloud_vpc.test.name
+# }
+
+data "huaweicloud_vpcs" "test" {
+  name = huaweicloud_vpc.test.name
 }
 
 output "vpc_result_count" {
-  value = module.network.vpc_result_count
+  value = length(data.huaweicloud_vpcs.test.vpcs)
 }
