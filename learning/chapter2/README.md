@@ -4,8 +4,7 @@ terraform提供了两种provider鉴权的方式，其中一种方式是通过pro
 
 ## 如何通过脚本配置鉴权信息
 
-根据[provider文档](https://registry.terraform.io/providers/huaweicloud/huaweicloud/latest/docs)提供的参数列表并根据实际使用场景，补充鉴权模块的相关参数配置。
-如：管理网络服务资源的最小鉴权参数集为：region和AK/SK。
+根据provider文档
 
 ```hcl
 provider "huaweicloud" {

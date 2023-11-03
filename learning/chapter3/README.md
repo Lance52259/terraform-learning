@@ -12,7 +12,7 @@ variable "image_name" {
 
   validation {
     condition     = length(var.image_name) > 7 && substr(var.input_variable_name, 0, 7) == "Windows"
-    error_message = "The "
+    error_message = "Invalid format of the IMS image name"
   }
 }
 ```
@@ -39,7 +39,7 @@ variable "image_name" {
 
 ```hcl
 output "output_variable_name" {
-  depends_on = [
+  depend_on = [
     data.huaweicloud_xxx_xxx.test.xxx,
     huaweicloud_xxx_xxx.test.xxx,
   ]

@@ -92,9 +92,9 @@ output "resource_ids" {
 ## Dynamic
 
 某些资源类型在其参数中包含可重复的嵌套块，这些块通常包含对象相关（或嵌入其中）的对象引用，For表达式和Splat表达式无法应对这一复杂场景。
-Dynamic表达式为这一特殊场景的表达式提供了有效的且可嵌套的解决方案。
+Dynamic表达式为这一特殊场景的表达式提供了有效的且可嵌套的解决方案：
 
-不使用Dynamic表达式时，结构体列表需要的脚本代码量与列表长度挂钩，且对于复数资源的引用过于生硬：
+不使用Dynamic表达式时，结构体列表需要的脚本代码量与列表长度挂钩：
 
 ```hcl
 resource "huaweicloud_apig_channel" "test" {
@@ -132,5 +132,3 @@ resource "huaweicloud_apig_channel" "test" {
   }
 }
 ```
-
-除了以上表达式的学习外，掌握常用函数也是脚本编写的一项必修课。
