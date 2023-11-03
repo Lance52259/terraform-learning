@@ -229,9 +229,9 @@ terraform {
 }
 ```
 
-## modules的部署流程
+## 关联关系
 
-各模块的`main.tf`、`variables.tf`和`outputs.tf`文件共同组成了完整的Terraform可执行脚本，其部署的大致流程为：
+上述三个.tf文件定义了一个完整的Terraform可执行脚本，其执行顺序在Terraform中是：
 
 + 执行`terraform init`，根据版本和云厂商信息将provider下载到本地（**main.tf**文件中对应的terraform块和provider块的配置信息）。
 + 执行`terraform apply`，根据**variables.tf**文件定义的参数列表一一要求用户输入（如果有的话），将这些参数分别传递给**main.tf**文件中的各子模块（如果有的话），生成对应的执行计划，然后将部分参数回传给父模块，不断递归，直至所有模块完成执行计划的生成。
