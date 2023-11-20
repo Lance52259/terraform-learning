@@ -11,7 +11,7 @@ variable "image_name" {
   nullable    = false
 
   validation {
-    condition     = length(var.image_name) > 7 && substr(var.input_variable_name, 0, 7) == "Windows"
+    condition     = length(var.image_name) > 7 && substr(var.image_name, 0, 7) == "Windows"
     error_message = "Invalid format of the IMS image name"
   }
 }
@@ -33,7 +33,29 @@ variable "image_name" {
   `terraform apply -var region_name=cn-north-4`
 + 其三是使用`.tfvars`文件中预设的key-value替代各变量的default内容。
 
-注意: 输入变量不可用于terraform模块的定义中。
+注意: 输入变量不可被引用于`terraform`模块的定义中。
+
+JSON格式的输入变量定义如下：
+
+```json
+{
+  ...
+
+  "variable": {
+    "image_name": {
+      "type": "string",
+      "default": "Windows Server 2013",
+      "description": "This is an available image name of the ECS instance",
+      "sensitive": "false",
+      "nullable": "false",
+      "validation": {
+        "condition": "${length(var.image_name) > 7 && substr(var.image_name, 0, 7) == \"Windows\"}",
+        "error_message": "Invalid format of the IMS image name"
+      }
+    }
+  }
+}
+```
 
 ## 如何定义输出变量
 
@@ -56,3 +78,21 @@ output "output_variable_name" {
 + **description**: （非必选）输出变量的描述。
 + **sensitive**: （非必选）（布尔类型）敏感变量标记，用于限制output的输出，默认值false。
 + **precondition**: （非必选）执行输出前的校验，内容同输入变量的condition变量的自定义校验，由condition（布尔表达式）和error_message组成。
+
+```json
+{
+  ...
+
+  "output": {
+    "output_variable_name" {
+      "depend_on": [
+        "data.huaweicloud_xxx_xxx.test.xxx",
+        "huaweicloud_xxx_xxx.test.xxx",
+      ],
+    
+      "value": "xxx",
+      "description": "This is an output variable"
+    }
+  }
+}
+```

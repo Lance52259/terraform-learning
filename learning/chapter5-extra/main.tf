@@ -7,32 +7,17 @@ terraform {
   }
 }
 
-data "huaweicloud_availability_zones" "test" {}
-
-module "vpc_service" {
-  source = "github.com/terraform-huaweicloud-modules/terraform-huaweicloud-vpc"
-
-  vpc_name                           = var.vpc_name
-  vpc_cidr_block                     = var.vpc_cidr
-  subnets_configuration              = var.subnets_configuration
-  security_group_name                = var.security_group_name
-  security_group_rules_configuration = var.security_group_rules_configuration
+resource "huaweicloud_vpc" "test" {
+  name = format("%s-vpc", var.name_prefix)
+  cidr = var.vpc_cidr
 }
 
-module "ecs_service" {
-  source = "./modules/ecs"
+module "network" {
+  source = "./modules/network"
 
-  subnet_id          = module.vpc_service.subnet_ids[0]
-  security_group_ids = [module.vpc_service.security_group_id]
-  availability_zone  = data.huaweicloud_availability_zones.test.names[0]
+  vpc_name = huaweicloud_vpc.test.name
+}
 
-  instance_name               = var.instance_name
-  instance_flavor_performance = var.instance_flavor_performance
-  instance_flavor_cpu         = var.instance_flavor_cpu
-  instance_flavor_memory      = var.instance_flavor_memory
-  instance_image_name         = var.instance_image_name
-  system_disk_type            = var.system_disk_type
-  system_disk_size            = var.system_disk_size
-  admin_password              = var.admin_password
-  data_disks_configuration    = var.data_disks_configuration
+output "vpc_result_count" {
+  value = module.network.vpc_result_count
 }

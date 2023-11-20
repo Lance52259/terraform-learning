@@ -7,10 +7,10 @@ terraform {
   }
 }
 
-variable "region_name" {
-  default = "cn-south-1"
+variable "count_test" {
+  default = 1
 }
 
 output "region_name" {
-  value = var.region_name
+  value = "${var.count_test-1}"
 }

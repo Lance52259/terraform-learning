@@ -1,17 +1,33 @@
 terraform {
   required_providers {
     huaweicloud = {
+      # source  = "local-registry/huaweicloud/huaweicloud"
       source  = "huaweicloud/huaweicloud"
-      version = ">=1.40.0"
+      version = ">=1.56.0"
     }
   }
 }
 
-module "network_service" {
-  # 使用远端仓库作为子模块的引用源
-  source = "github.com/terraform-huaweicloud-modules/terraform-huaweicloud-vpc"
-#   source = "github.com/terraform-huaweicloud-modules/terraform-huaweicloud-vpc?ref=v1.1.0"
+resource "huaweicloud_vpc" "test" {
+  name = format("%s-vpc", var.name_prefix)
+  cidr = var.vpc_cidr
+}
 
-  vpc_name       = var.vpc_name
-  vpc_cidr_block = var.vpc_cidr_block
+resource "huaweicloud_vpc_subnet" "test" {
+  // 隐式依赖
+  vpc_id = huaweicloud_vpc.test.id
+
+  name       = format("%s-subnet", var.name_prefix)
+  cidr       = cidrsubnet(huaweicloud_vpc.test.cidr, 4, 0)
+  gateway_ip = cidrhost(cidrsubnet(huaweicloud_vpc.test.cidr, 4, 0), 1)
+}
+
+resource "huaweicloud_networking_secgroup" "test" {
+  depends_on = [huaweicloud_vpc_subnet.test]
+
+  name = format("%s-security-group", var.name_prefix)
+}
+
+data "huaweicloud_vpcs" "test" {
+  name = huaweicloud_vpc.test.name
 }

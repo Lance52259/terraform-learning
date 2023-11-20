@@ -1,33 +1,25 @@
 terraform {
   required_providers {
     huaweicloud = {
-      # source  = "local-registry/huaweicloud/huaweicloud"
-      source  = "huaweicloud/huaweicloud"
+      source  = "local-registry/huaweicloud/huaweicloud"
       version = ">=1.56.0"
     }
   }
 }
 
-resource "huaweicloud_vpc" "test" {
-  name = format("%s-vpc", var.name_prefix)
-  cidr = var.vpc_cidr
+variable "private_ips" {
+  default = ["192.168.0.68", "172.16.0.1", "172.16.0.73"]
 }
 
-resource "huaweicloud_vpc_subnet" "test" {
-  // 隐式依赖
-  vpc_id = huaweicloud_vpc.test.id
-
-  name       = format("%s-subnet", var.name_prefix)
-  cidr       = cidrsubnet(huaweicloud_vpc.test.cidr, 4, 0)
-  gateway_ip = cidrhost(cidrsubnet(huaweicloud_vpc.test.cidr, 4, 0), 1)
+output "server_configuration" {
+  value = <<EOT
+%{ for private_ip in var.private_ips }Server ${private_ip}%{ endfor }
+EOT
 }
 
-resource "huaweicloud_networking_secgroup" "test" {
-  depends_on = [huaweicloud_vpc_subnet.test]
-
-  name = format("%s-security-group", var.name_prefix)
-}
-
-data "huaweicloud_vpcs" "test" {
-  name = huaweicloud_vpc.test.name
+output "multi_text" {
+  value = <<-EOT
+  HELLO
+    WORLD
+EOT
 }

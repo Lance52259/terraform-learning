@@ -5,6 +5,7 @@
 作为编排脚本的必备配置，terraform模块声明了编排脚本所使用的工具的必要信息。
 
 ```hcl
+## HCL格式的模块声明（文件名为main.tf）
 terraform {
   required_version = ">=1.3.0"
 
@@ -26,6 +27,21 @@ required_providers中配置了我们需要用远端或本地加载的provider包
 
 + **source**: 待加载仓库的远端或本地路径
 + **version**: 版本信息
+
+除了HCL格式的定义外，terraform还支持JSON格式的定义，如：
+
+```json
+// JSON格式的模块声明（文件名为main.tf.json）
+{
+  "terraform": {
+    "required_providers": {
+      "provider_name": {
+        ...
+      }
+    }
+  }
+}
+```
 
 ### 如何加载远端provider
 
@@ -50,6 +66,22 @@ terraform {
 
   三种方式执行的版本信息均可以通过`terraform init -upgrade`命令进行升级，注意：`=`和`~>`（跨版本时）需要在升级前修改指定的版本信息。
 
+通过JSON格式脚本加载远端provider的写法如下：
+
+```json
+// JSON格式的模块声明（文件名为main.tf.json）
+{
+  "terraform": {
+    "required_providers": {
+      "huaweicloud": {
+        "source": "huaweicloud/huaweicloud",
+        "version": "~> 1.56.0"
+      }
+    }
+  }
+}
+```
+
 ### 如何加载本地provider
 
 ```hcl
@@ -70,3 +102,19 @@ terraform {
   - `~>`：下载不低于指定版本的最新补丁版本的provider，如不存在该版本号或对应补丁版本的provider时则报错，如指定`~>1.50.0`且远端有`1.50.0`，`1.50.1`，`1.50.2`和`1.51.0`版本，下载`1.50.2`。
 
   三种方式执行的版本信息均可以通过`terraform init -upgrade`命令进行升级，注意：`=`和`~>`（跨版本时）需要在升级前修改指定的版本信息。
+
+同理，通过JSON格式脚本加载本地provider的写法如下：
+
+```json
+// JSON格式的模块声明（文件名为main.tf.json）
+{
+  "terraform": {
+    "required_providers": {
+      "huaweicloud": {
+        "source": "local-registry/huaweicloud/huaweicloud",
+        "version": ">=1.56.1"
+      }
+    }
+  }
+}
+```
