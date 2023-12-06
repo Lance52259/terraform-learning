@@ -1,4 +1,4 @@
-// AK信息（无效AK仅供参考）
-access_key = "XRTN5CFCTHJQWVRRXFOQ"
-// SK信息（无效SK仅供参考）
-secret_key = "Ym5bGG6oKwnrX6zzpP4as0iMjBIS8pxDUCYDle9p"
+// AK信息，获取途径：控制台-我的凭证-访问密钥
+access_key = "{Your access key}"
+// SK信息，获取途径：控制台-我的凭证-访问密钥
+secret_key = "{Your secret key}"
